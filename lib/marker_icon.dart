@@ -8,35 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MarkerIcon {
-  static Future<BitmapDescriptor> svgAsset({
-    required String assetName,
-    required BuildContext context,
-    required double size,
-  }) async {
-    final mediaQuery = MediaQuery.of(context);
-    // Read SVG file as String
-    String svgString = await DefaultAssetBundle.of(context).loadString(assetName);
-    // Create DrawableRoot from SVG String
-    final svgDrawableRoot = await svg.fromSvgString(svgString, svgString);
-    // toPicture() and toImage() don't seem to be pixel ratio aware, so we calculate the actual sizes here
-    double devicePixelRatio = mediaQuery.devicePixelRatio;
-    double width = size * devicePixelRatio; // where 32 is your SVG's original width
-    double height = size * devicePixelRatio; // same thing
-    // Convert to ui.Picture
-    final picture = svgDrawableRoot.toPicture(size: Size(width, height));
-    // Convert to ui.Image. toImage() takes width and height as parameters
-    // you need to find the best size to suit your needs and take into account the
-    // screen DPI
-    final image = await picture.toImage(width.toInt(), height.toInt());
-    ByteData? bytes = await image.toByteData(format: ui.ImageByteFormat.png);
-    return BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
-  }
-
-
   static Future<BitmapDescriptor> pictureAsset({
     required String assetPath,
     required double width,
